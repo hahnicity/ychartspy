@@ -13,6 +13,6 @@ The following is example usage of the ycharts client library
     client = YChartsClient()
     client.get_security_prices("SPY", "1")  # Get all price data on the SP500 for the past year
     client.get_indicator_prices("USHS", "5")  # Get all US housing starts for the past 5 years
-    client.get_security_prices("F", "6m")  # Get all price data for Ford for the past 6 months
+    client.get_security_metric("F", "pe_ratio", "6m")  # Get all P/E ratios for Ford for the last 6 months
 
 [1]: http://ycharts.com/about/terms
