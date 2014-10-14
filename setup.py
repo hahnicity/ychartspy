@@ -15,5 +15,7 @@ setup(
         "requests",
     ],
     tests_require=[
+        "mock",
+        "nose"
     ]
 )
