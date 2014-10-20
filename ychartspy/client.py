@@ -1,15 +1,24 @@
 import requests
 
-from ychartspy.constants import AVAILABLE_SECURITY_METRICS, YCHARTS_URL
+from ychartspy.constants import (
+    AVAILABLE_SECURITY_METRICS, YCHARTS_DATA_URL, YCHARTS_LOGIN_URL
+)
 
 
 class YChartsClient(object):
+    def __init__(self):
+        self.session = requests.session()
+        # Initialize the session
+        self.session.get(YCHARTS_LOGIN_URL)
+
     def _get_raw_data(self, response):
         return response.json()["chart_data"][0][0]["raw_data"]
 
     def _make_request(self, ticker, metric, time_length, ticker_type):
         params = self._set_request_params(ticker, metric, time_length, ticker_type)
-        return requests.get(YCHARTS_URL, params=params)
+        response = self.session.get(YCHARTS_DATA_URL, params=params)
+        self._validate_response(response)
+        return response
 
     def _set_request_params(self, ticker, metric, time_length, ticker_type):
         if ticker_type == "indicator":
@@ -21,6 +30,22 @@ class YChartsClient(object):
             ("calcs", "id:{},include:true".format(metric)),
             ("zoom", time_length)
         ]
+
+    def _validate_response(self, response):
+        if response.status_code > 302:
+            raise Exception(
+                "The request to {} failed with code {}. Response text \n\n {}"
+                .format(response.request.url, response.status_code, response.text)
+            )
+
+    def authenticate(self, username, password):
+        response = self.session.post(
+            YCHARTS_LOGIN_URL,
+            data={"username": username,
+                  "password": password,
+                  "csrfmiddlewaretoken": self.session.cookies["csrftoken"]}
+        )
+        self._validate_response(response)
 
     def get_security_prices(self, ticker, time_length):
         """

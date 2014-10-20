@@ -112,4 +112,5 @@ AVAILABLE_SECURITY_METRICS = (
     "market_cap_fractile",
     "quality_ratio_fractile",
 )
-YCHARTS_URL = "http://ycharts.com/charts/fund_data/json"
+YCHARTS_DATA_URL = "http://ycharts.com/charts/fund_data/json"
+YCHARTS_LOGIN_URL = "http://ycharts.com/login"
