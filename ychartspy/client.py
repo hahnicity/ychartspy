@@ -81,7 +81,7 @@ class YChartsClient(object):
         :param time_length: 1 year (1)/3 months (3m)/etc..
         """
         _validate_date_input(time_length, start_date, end_date)
-        response = self._make_request(ticker, "price", time_length, "security")
+        response = self._make_request(ticker, "price", time_length, start_date, end_date, "security")
         return self._get_raw_data(response)
 
     def get_indicator_prices(self, ticker, time_length=None, start_date=None, end_date=None):
@@ -92,7 +92,7 @@ class YChartsClient(object):
         :param time_length: 1 year (1)/3 months (3m)/etc..
         """
         _validate_date_input(time_length, start_date, end_date)
-        response = self._make_request(ticker, "price", time_length, "indicator")
+        response = self._make_request(ticker, "price", time_length, start_date, end_date, "indicator")
         return self._get_raw_data(response)
 
     def get_security_metric(self, ticker, metric, time_length=None, start_date=None, end_date=None):
